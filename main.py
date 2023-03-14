@@ -1,48 +1,38 @@
-import numpy as np
-import tkinter as tk
-import customtkinter as ctk
-from PIL import ImageTk, Image
-import cv2
-
-# Init tkinter
-ctk.set_appearance_mode("System")
-ctk.set_default_color_theme("blue")
-window = ctk.CTk()
-
-# Init frames
-src_frame = ctk.CTkFrame(master=window, width=480, height=640)
-dst_frame = ctk.CTkFrame(master=window, width=480, height=640)
-
-# Window Control functions
-def button_process_pressed():
-    filetypes = [('Image files', '*.jpg')]
-    file_path = ctk.filedialog.askopenfilename(
-        title='Open source file...',
-        initialdir='./data/',
-        filetypes=filetypes
-    )
-    #TODO: Clip image
-    img = ctk.CTkImage(Image.open(file_path),size=(480, 640))
-    img_label = ctk.CTkLabel(master=src_frame, image=img, text="")
-    img_label.pack()
-
-def main():
-    window.title('CVLightPass')
-    window.geometry('1280x660')
-    # Create image stack panel
-    #TODO:Move init window control into another class
-    src_frame.pack(side='left', fill='y', padx=10, pady=10)
-    dst_frame.pack(side='left', fill='y', padx=0, pady=10)
-    
-    button_process = ctk.CTkButton(master=window, text="开始处理", command=button_process_pressed)
-    button_process.pack()
-    #testimg = cv2.imread('./data/testimg.jpg')
-    window.mainloop()
-    #cv2.imshow('testimage', testimg)
-    #cv2.waitKey(0)
-    pass
+from flask import *
 
 
+app = Flask(__name__, static_folder = './', static_url_path = '/')
+app.config["JSON_AS_ASCII"] = False
+mainpage_path = "index.html"
+is_debug = True
+
+# Mainpage
+@app.route('/')
+def index():
+    return app.send_static_file(mainpage_path)
+
+# Fallback
+@app.route('/<path:fallback>')
+def fallback(fallback):
+    if fallback == 'favicon.ico':
+        return app.send_static_file(fallback)
+    else:
+        return app.send_static_file(mainpage_path)
+
+# Test method
+@app.route('/api/ping', methods=['GET'])
+def api_ping():
+    return jsonify('测试');
+
+# Process Image
+@app.route('/api/upload', methods=['POST'])
+def api_upload():
+    method = request.values["method"]
+    if method != None: # test on getting requests
+        return jsonify('{} not implemented!'.format(method))
+    return jsonify('Not implemented!');
+
+
+# Startup
 if __name__ == '__main__':
-    # call main function
-    main()
+    app.run(host='0.0.0.0', port=80, debug=is_debug)

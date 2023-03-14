@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+
+    <div id="app">{{ message }}</div>
+    
+    <script>
+      const { createApp } = Vue
+        
+      createApp({
+        data() {
+          return {
+            message: 'Hello world!'
+          }
+        }
+      }).mount('#app')
+    </script>
+</html>
+
