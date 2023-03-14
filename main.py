@@ -23,7 +23,7 @@ def button_process_pressed():
     )
     #TODO: Clip image
     img = ctk.CTkImage(Image.open(file_path),size=(480, 640))
-    img_label = ctk.CTkLabel(master=src_frame, image=img)
+    img_label = ctk.CTkLabel(master=src_frame, image=img, text="")
     img_label.pack()
 
 def main():
@@ -31,8 +31,8 @@ def main():
     window.geometry('1280x660')
     # Create image stack panel
     #TODO:Move init window control into another class
-    src_frame.pack(side='left', padx=10, pady=10)
-    dst_frame.pack(side='left', padx=0, pady=10)
+    src_frame.pack(side='left', fill='y', padx=10, pady=10)
+    dst_frame.pack(side='left', fill='y', padx=0, pady=10)
     
     button_process = ctk.CTkButton(master=window, text="开始处理", command=button_process_pressed)
     button_process.pack()
