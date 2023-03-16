@@ -1,19 +1,133 @@
 <!DOCTYPE html>
 <html lang="zh">
-    <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+  <head>
+    <meta charset="utf-8">
+    <title>CVLightPass</title>
+    <!-- Import style -->
+    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+    <!-- Import Vue 3 -->
+    <script src="//unpkg.com/vue@3"></script>
+    <!-- Import component library -->
+    <script src="//unpkg.com/element-plus"></script>
+  </head>
 
-    <div id="app">{{ message }}</div>
+  <div id="header" style="margin: 20px;">
+    <h1>{{title}}</h1>
+    <p>{{description}}</p>
+  </div>
+
+  <div id="panel" style="width: 400px;float:left; margin: 20px;">
+    <div id="file">
+      <el-upload
+      v-model:file-list="fileList"
+      class="upload"
+      action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+      :on-preview="handlePreview"
+      :on-remove="handleRemove"
+      list-type="picture"
+      >
+        <el-button type="primary">{{buttonText}}</el-button>
+        <template #tip>
+          <div class="el-upload__tip">{{buttonTip}}</div>
+        </template>
+      </el-upload>
+    </div>
     
-    <script>
+    <div id="methodDark">
+      <h4>{{title}}</h4>
+      <p>{{description}}</p>
+      <div class="slider-w0" style="margin:10px">
+        <span>w0</span>
+        <el-slider v-model="value" show-input/>
+      </div>
+      <div class="slider-t0" style="margin:10px">
+        <span>t0</span>
+        <el-slider v-model="value" show-input/>
+      </div>
+    </div>
+
+    <div id="methodRetinex">
+      <h4>{{title}}</h4>
+      <p>{{description}}</p>
+      <div class="slider-a0" style="margin:10px">
+        <span>a0</span>
+        <el-slider v-model="value" show-input/>
+      </div>
+      <div class="slider-b0" style="margin:10px">
+        <span>b0</span>
+        <el-slider v-model="value" show-input/>
+      </div>
+    </div>
+  </div>
+
+  <div id="image">
+    <el-image style="width: 600px; height: 600px; margin:20px;" 
+              src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+              fit="contain" />
+  </div>
+
+  <script>
       const { createApp } = Vue
-        
-      createApp({
+      const Header = {
         data() {
           return {
-            message: 'Hello world!'
-          }
-        }
-      }).mount('#app')
-    </script>
+            title: '文物图像信息增强系统',
+            description: '大学生创新创业训练项目 - 基于光谱成像的文物信息增强系统'
+          };
+        },
+      };
+      const headerApp = createApp(Header)
+      headerApp.use(ElementPlus)
+      headerApp.mount("#header")
+
+      const File = {
+        data() {
+          return {
+            title: '(0) 选择文件',
+            description: '选择要处理的文件并上传',
+            buttonText: '选择文件',
+            buttonTip: '文件大小在1MB以内'
+          };
+        },
+      };
+      const fileApp = createApp(File)
+      fileApp.use(ElementPlus)
+      fileApp.mount("#file")
+
+      const MethodDark = {
+        data() {
+          return {
+            title: '(1) 暗原色先验',
+            description: '使用暗原色先验方法进行处理'
+          };
+        },
+      };
+      const methodDarkApp = createApp(MethodDark)
+      methodDarkApp.use(ElementPlus)
+      methodDarkApp.mount("#methodDark")
+
+      const MethodRetinex = {
+        data() {
+          return {
+            title: '(2) Retinex图像增强',
+            description: '使用Retinex方法进行处理'
+          };
+        },
+      };
+      const methodRetinexApp = createApp(MethodRetinex)
+      methodRetinexApp.use(ElementPlus)
+      methodRetinexApp.mount("#methodRetinex")
+
+      const Image = {
+        data() {
+          return {
+            
+          };
+        },
+      };
+      const imageApp = createApp(Image)
+      imageApp.use(ElementPlus)
+      imageApp.mount("#image")
+  </script>
 </html>
 
