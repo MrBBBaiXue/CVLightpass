@@ -11,9 +11,20 @@ config_version=5
 [application]
 
 config/name="CVLightpass"
+run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.0", "Mobile")
-config/icon="res://images/icon.svg"
+run/max_fps=60
+run/low_processor_mode=true
+boot_splash/bg_color=Color(0.156863, 0.156863, 0.156863, 1)
+boot_splash/show_image=false
+config/icon="res://resources/icon.svg"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
 
 [rendering]
 
 renderer/rendering_method="mobile"
+environment/defaults/default_clear_color=Color(0.156863, 0.156863, 0.156863, 1)

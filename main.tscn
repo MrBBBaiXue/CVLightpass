@@ -1,4 +1,13 @@
-[gd_scene format=3 uid="uid://bm1qrpmpbx6vv"]
+[gd_scene load_steps=5 format=3 uid="uid://bm1qrpmpbx6vv"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_mouyh"]
+[ext_resource type="LabelSettings" uid="uid://0qsj81xam846" path="res://resources/labelsettings_title.tres" id="2_stj2e"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_53881"]
+font_size = 20
+font_color = Color(1, 1, 0.560784, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_alfy0"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -7,3 +16,181 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_mouyh")
+
+[node name="MainContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.02
+anchor_right = 0.98
+anchor_bottom = 0.98
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleContainer" type="HBoxContainer" parent="MainContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="AppTitle" type="Label" parent="MainContainer/TitleContainer"]
+layout_mode = 2
+text = "文物图像信息增强系统"
+label_settings = ExtResource("2_stj2e")
+
+[node name="ServerStatus" type="Label" parent="MainContainer/TitleContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "[后端状态]"
+
+[node name="BodyContainer" type="HBoxContainer" parent="MainContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PanelContainer" type="VBoxContainer" parent="MainContainer/BodyContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="ButtonContainer" type="HBoxContainer" parent="MainContainer/BodyContainer/PanelContainer"]
+custom_minimum_size = Vector2(40, 30)
+layout_mode = 2
+
+[node name="ImportButton" type="Button" parent="MainContainer/BodyContainer/PanelContainer/ButtonContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "导入"
+
+[node name="ProcessButton" type="Button" parent="MainContainer/BodyContainer/PanelContainer/ButtonContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "处理"
+
+[node name="MethodDarkContainer" type="VBoxContainer" parent="MainContainer/BodyContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="MainContainer/BodyContainer/PanelContainer/MethodDarkContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "暗原色方法"
+label_settings = SubResource("LabelSettings_53881")
+vertical_alignment = 1
+
+[node name="ParamContainer1" type="VBoxContainer" parent="MainContainer/BodyContainer/PanelContainer/MethodDarkContainer"]
+layout_mode = 2
+
+[node name="LabelContainer" type="HBoxContainer" parent="MainContainer/BodyContainer/PanelContainer/MethodDarkContainer/ParamContainer1"]
+layout_mode = 2
+
+[node name="TitleParam" type="Label" parent="MainContainer/BodyContainer/PanelContainer/MethodDarkContainer/ParamContainer1/LabelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "w0"
+label_settings = SubResource("LabelSettings_alfy0")
+vertical_alignment = 1
+
+[node name="ValueParam" type="Label" parent="MainContainer/BodyContainer/PanelContainer/MethodDarkContainer/ParamContainer1/LabelContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "[Value]"
+label_settings = SubResource("LabelSettings_alfy0")
+vertical_alignment = 1
+
+[node name="SliderParam" type="HSlider" parent="MainContainer/BodyContainer/PanelContainer/MethodDarkContainer/ParamContainer1"]
+layout_mode = 2
+min_value = 0.1
+max_value = 1.0
+step = 0.1
+value = 0.6
+
+[node name="ParamContainer2" type="VBoxContainer" parent="MainContainer/BodyContainer/PanelContainer/MethodDarkContainer"]
+layout_mode = 2
+
+[node name="LabelContainer" type="HBoxContainer" parent="MainContainer/BodyContainer/PanelContainer/MethodDarkContainer/ParamContainer2"]
+layout_mode = 2
+
+[node name="TitleParam" type="Label" parent="MainContainer/BodyContainer/PanelContainer/MethodDarkContainer/ParamContainer2/LabelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "t0"
+label_settings = SubResource("LabelSettings_alfy0")
+vertical_alignment = 1
+
+[node name="ValueParam" type="Label" parent="MainContainer/BodyContainer/PanelContainer/MethodDarkContainer/ParamContainer2/LabelContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "[Value]"
+label_settings = SubResource("LabelSettings_alfy0")
+vertical_alignment = 1
+
+[node name="SliderParam" type="HSlider" parent="MainContainer/BodyContainer/PanelContainer/MethodDarkContainer/ParamContainer2"]
+layout_mode = 2
+min_value = 0.1
+max_value = 1.0
+step = 0.1
+value = 0.1
+
+[node name="MethodRetinexContainer" type="VBoxContainer" parent="MainContainer/BodyContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Retinex方法"
+label_settings = SubResource("LabelSettings_53881")
+vertical_alignment = 1
+
+[node name="ParamContainer1" type="VBoxContainer" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer"]
+layout_mode = 2
+
+[node name="LabelContainer" type="HBoxContainer" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer1"]
+layout_mode = 2
+
+[node name="TitleParam" type="Label" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer1/LabelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "a0"
+label_settings = SubResource("LabelSettings_alfy0")
+vertical_alignment = 1
+
+[node name="ValueParam" type="Label" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer1/LabelContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "[Value]"
+label_settings = SubResource("LabelSettings_alfy0")
+vertical_alignment = 1
+
+[node name="SliderParam" type="HSlider" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer1"]
+layout_mode = 2
+min_value = 0.1
+max_value = 1.0
+step = 0.1
+value = 0.6
+
+[node name="ParamContainer2" type="VBoxContainer" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer"]
+layout_mode = 2
+
+[node name="LabelContainer" type="HBoxContainer" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer2"]
+layout_mode = 2
+
+[node name="TitleParam" type="Label" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer2/LabelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "b0"
+label_settings = SubResource("LabelSettings_alfy0")
+vertical_alignment = 1
+
+[node name="ValueParam" type="Label" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer2/LabelContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "[Value]"
+label_settings = SubResource("LabelSettings_alfy0")
+vertical_alignment = 1
+
+[node name="SliderParam" type="HSlider" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer2"]
+layout_mode = 2
+min_value = 0.1
+max_value = 1.0
+step = 0.1
+value = 0.1
