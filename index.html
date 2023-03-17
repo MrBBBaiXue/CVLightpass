@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <title>CVLightPass</title>
+    <!-- Import style -->
+    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+    <!-- Import Vue 3 -->
+    <script src="//unpkg.com/vue@3"></script>
+    <!-- Import component library -->
+    <script src="//unpkg.com/element-plus"></script>
+  </head>
+  
+  <div id="header" style="margin: 20px;">
+    <h1>文物图像信息增强系统</h1>
+    <p>大学生创新创业训练项目 - 基于光谱成像的文物信息增强系统</p>
+  </div>
+
+  <div id="app" style="width: 400px;float:left; margin: 20px;">
+    <div id="file">
+      <el-button>{{fileButtonText}}</el-button>
+      <p>{{fileDescription}}</p>
+    </div>
+    
+    <div id="methodDark">
+      <h4>{{methodDarkTitle}}</h4>
+      <p>{{methodDarkDescription}}</p>
+      <div class="slider-w0" style="margin:10px">
+        <span>w0</span>
+        <el-slider v-model="w0" show-input />
+      </div>
+      <div class="slider-t0" style="margin:10px">
+        <span>t0</span>
+        <el-slider v-model="t0" show-input />
+      </div>
+    </div>
+
+    <div id="methodRetinex">
+      <h4>{{methodRetinexTitle}}</h4>
+      <p>{{methodRetinexDescription}}</p>
+      <div class="slider-a0" style="margin:10px">
+        <span>a0</span>
+        <el-slider v-model="a0" show-input />
+      </div>
+      <div class="slider-b0" style="margin:10px">
+        <span>b0</span>
+        <el-slider v-model="b0" show-input />
+      </div>
+    </div>
+
+    <div id="process" style="margin-top: 20px;">
+      <el-button type="primary">{{startButtonText}}</el-button>
+    </div>
+  </div>
+
+  <div id="image">
+    <el-image style="width: 600px; height: 600px; margin:20px;" 
+              src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+              fit="contain" />
+  </div>
+
+  <script>
+      const { createApp } = Vue
+
+      const App = {
+        data() {
+          return {
+            fileButtonText: '选择文件',
+            fileDescription: '选择要处理的文件并上传',
+            methodDarkTitle: '(1) 暗原色先验',
+            methodDarkDescription: '使用暗原色先验方法进行处理',
+            methodRetinexTitle: '(2) Retinex图像增强',
+            methodRetinexDescription: '使用Retinex方法进行处理',
+            startButtonText: '开始处理',
+            w0: 10,
+            t0: 60,
+            a0: 40,
+            b0: 50
+          };
+        },
+      };
+      const app = createApp(App)
+      app.use(ElementPlus)
+      app.mount("#app")
+
+      
+      const Image = {
+        data() {
+          return {
+            
+          };
+        },
+      };
+      const image = createApp(Image)
+      image.use(ElementPlus)
+      image.mount('#image')
+  </script>
+</html>
+
