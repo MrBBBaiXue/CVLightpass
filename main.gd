@@ -11,6 +11,8 @@ extends Control
 @onready var param3_slider = %MethodRetinexContainer/ParamContainer1/SliderParam
 @onready var param4_slider = %MethodRetinexContainer/ParamContainer2/SliderParam
 
+# Image list
+var image_list = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -27,14 +29,24 @@ func _process(delta):
 
 
 #------------------------------
-
+# Operation button
 #------------------------------
 func _on_import_button_pressed():
 	var file_dialog = FileDialog.new()
 	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	file_dialog.access = FileDialog.ACCESS_FILESYSTEM
+	file_dialog.add_filter("*.png, *.jpg, *.jpeg ; Supported Images")
+	file_dialog.size = Vector2i(640, 480)
+	file_dialog.dialog_hide_on_ok = true
 	add_child(file_dialog)
 	file_dialog.popup_centered()
+	file_dialog.file_selected.connect(_on_image_imported)
 	pass # Replace with function body.
+
+func _on_image_imported():
+	# Init image node.
+	
+	pass
 
 func _on_process_button_pressed():
 	pass # Replace with function body.
