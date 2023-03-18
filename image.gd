@@ -1,8 +1,9 @@
 extends Panel
 
 @export var image_path : String = ""
+@export var image_id: String = ""
 
-var img = null
+var img : Image = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -10,7 +11,7 @@ func _ready() -> void:
 		# Display Image
 		img = Image.load_from_file(image_path)
 		var texture = ImageTexture.create_from_image(img)
-		%FileName.text = image_path.get_file()
+		%FileID.text = image_id
 		%TextureRect.texture = texture
 
 

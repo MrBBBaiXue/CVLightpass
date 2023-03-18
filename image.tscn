@@ -19,7 +19,7 @@ alignment = 1
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="FileName" type="Label" parent="VboxContainer/Header"]
+[node name="FileID" type="Label" parent="VboxContainer/Header"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2

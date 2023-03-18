@@ -1,5 +1,7 @@
 # Data folder (case the data is still confidential)
-data/
+!data/.gdignore
+data/*.jpg
+data/*.png
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -30,12 +30,12 @@ func _ready():
 			%ServerStatus.text = "已连接后端服务器"
 		else:
 			%ServerStatus.text = "连接失败"
+		test_request.queue_free()
 		)
-	var error = test_request.request("http://127.0.0.1:27015/api/ping")
+	var error = test_request.request(Global.api + "/api/ping")
 	print(error)
 	if error != OK:
 		push_error(error)
-
 
 
 #------------------------------
@@ -54,7 +54,6 @@ func _on_import_button_pressed():
 	pass # Replace with function body.
 
 func _on_image_imported(path):
-	# TODO: Move to global
 	Global.add_image(path)
 
 
