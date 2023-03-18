@@ -46,6 +46,8 @@ func upload_image(id: String, path: String) -> void:
 		push_error(error)
 	pass
 
+func process_image(id, method) -> void:
+	pass
 
 func download_image(id) -> void:
 	

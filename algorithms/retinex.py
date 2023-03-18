@@ -1,77 +1,125 @@
 import numpy as np
 import cv2
 
+def singleScaleRetinex(img, sigma):
 
-def replaceZeroes(data):
-    min_nonzero = min(data[np.nonzero(data)])
-    data[data == 0] = min_nonzero
-    return data
+    retinex = np.log10(img) - np.log10(cv2.GaussianBlur(img, (0, 0), sigma))
 
-def simple_color_balance(input_img, s1, s2):
-    h, w = input_img.shape[:2]
-    temp_img = input_img.copy()
-    one_dim_array = temp_img.flatten()
-    sort_array = sorted(one_dim_array)
+    return retinex
 
-    per1 = int((h * w) * s1 / 100)
-    minvalue = sort_array[per1]
+def multiScaleRetinex(img, sigma_list):
 
-    per2 = int((h * w) * s2 / 100)
-    maxvalue = sort_array[(h * w) - 1 - per2]
+    retinex = np.zeros_like(img)
+    for sigma in sigma_list:
+        retinex += singleScaleRetinex(img, sigma)
 
-    # 实施简单白平衡算法
-    if (maxvalue <= minvalue):
-        out_img = np.full(input_img.shape, maxvalue)
-    else:
-        scale = 255.0 / (maxvalue - minvalue)
-        out_img = np.where(temp_img < minvalue, 0,temp_img)   # 防止像素溢出
-        out_img = np.where(out_img > maxvalue, 255,out_img)   # 防止像素溢出
-        out_img = scale * (out_img - minvalue)                # 映射中间段的图像像素
-        out_img = cv2.convertScaleAbs(out_img)
-    return out_img
+    retinex = retinex / len(sigma_list)
 
+    return retinex
 
-def MSRCP(img, scales, s1, s2):
-    h, w = img.shape[:2]
-    scales_size = len(scales)
-    B_chan = img[:, :, 0]
-    G_chan = img[:, :, 1]
-    R_chan = img[:, :, 2]
-    log_R = np.zeros((h, w), dtype=np.float32)
-    array_255 = np.full((h, w),255.0,dtype=np.float32)
+def colorRestoration(img, alpha, beta):
 
-    I_array = (B_chan + G_chan + R_chan) / 3.0
-    I_array = replaceZeroes(I_array)
+    img_sum = np.sum(img, axis=2, keepdims=True)
 
-    for i in range(0, scales_size):
-        L_blur = cv2.GaussianBlur(I_array, (scales[i], scales[i]), 0)
-        L_blur = replaceZeroes(L_blur)
-        dst_I = cv2.log(I_array/255.0)
-        dst_Lblur = cv2.log(L_blur/255.0)
-        dst_ixl = cv2.multiply(dst_I, dst_Lblur)
-        log_R += cv2.subtract(dst_I, dst_ixl)
-    MSR = log_R / 3.0
-    Int1 = simple_color_balance(MSR, s1, s2)
+    color_restoration = beta * (np.log10(alpha * img) - np.log10(img_sum))
 
-    B_array = np.maximum(B_chan,G_chan,R_chan)
-    A = np.minimum(array_255 / B_array, Int1/I_array)
-    R_channel_out = A * R_chan
-    G_channel_out = A * G_chan
-    B_channel_out = A * B_chan
+    return color_restoration
 
-    MSRCP_Out_img = cv2.merge([B_channel_out, G_channel_out, R_channel_out])
-    MSRCP_Out = cv2.convertScaleAbs(MSRCP_Out_img)
+def simplestColorBalance(img, low_clip, high_clip):    
 
-    return MSRCP_Out
+    total = img.shape[0] * img.shape[1]
+    for i in range(img.shape[2]):
+        unique, counts = np.unique(img[:, :, i], return_counts=True)
+        current = 0
+        for u, c in zip(unique, counts):            
+            if float(current) / total < low_clip:
+                low_val = u
+            if float(current) / total < high_clip:
+                high_val = u
+            current += c
+                
+        img[:, :, i] = np.maximum(np.minimum(img[:, :, i], high_val), low_val)
 
-if __name__ == '__main__':
-    img = './data/testphoto.jpg'
-    scales = [15,101,301]
-    s1, s2 = 2,3
-    src_img = cv2.imread(img)
-    result = MSRCP(src_img, scales, s1, s2)
+    return img    
 
-    cv2.imshow('img',src_img)
-    cv2.imshow('MSR_result',result)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+def MSRCR(img, sigma_list, G, b, alpha, beta, low_clip, high_clip):
+
+    img = np.float64(img) + 1.0
+
+    img_retinex = multiScaleRetinex(img, sigma_list)
+
+    img_color = colorRestoration(img, alpha, beta)    
+    img_msrcr = G * (img_retinex * img_color + b)
+
+    for i in range(img_msrcr.shape[2]):
+        img_msrcr[:, :, i] = (img_msrcr[:, :, i] - np.min(img_msrcr[:, :, i])) / \
+                             (np.max(img_msrcr[:, :, i]) - np.min(img_msrcr[:, :, i])) * \
+                             255
+    
+    img_msrcr = np.uint8(np.minimum(np.maximum(img_msrcr, 0), 255))
+    img_msrcr = simplestColorBalance(img_msrcr, low_clip, high_clip)       
+
+    return img_msrcr
+
+def automatedMSRCR(img, sigma_list):
+
+    img = np.float64(img) + 1.0
+
+    img_retinex = multiScaleRetinex(img, sigma_list)
+
+    for i in range(img_retinex.shape[2]):
+        unique, count = np.unique(np.int32(img_retinex[:, :, i] * 100), return_counts=True)
+        for u, c in zip(unique, count):
+            if u == 0:
+                zero_count = c
+                break
+            
+        low_val = unique[0] / 100.0
+        high_val = unique[-1] / 100.0
+        for u, c in zip(unique, count):
+            if u < 0 and c < zero_count * 0.1:
+                low_val = u / 100.0
+            if u > 0 and c < zero_count * 0.1:
+                high_val = u / 100.0
+                break
+            
+        img_retinex[:, :, i] = np.maximum(np.minimum(img_retinex[:, :, i], high_val), low_val)
+        
+        img_retinex[:, :, i] = (img_retinex[:, :, i] - np.min(img_retinex[:, :, i])) / \
+                               (np.max(img_retinex[:, :, i]) - np.min(img_retinex[:, :, i])) \
+                               * 255
+
+    img_retinex = np.uint8(img_retinex)
+        
+    return img_retinex
+
+def MSRCP(img, sigma_list, low_clip, high_clip):
+
+    img = np.float64(img) + 1.0
+
+    intensity = np.sum(img, axis=2) / img.shape[2]    
+
+    retinex = multiScaleRetinex(intensity, sigma_list)
+
+    intensity = np.expand_dims(intensity, 2)
+    retinex = np.expand_dims(retinex, 2)
+
+    intensity1 = simplestColorBalance(retinex, low_clip, high_clip)
+
+    intensity1 = (intensity1 - np.min(intensity1)) / \
+                 (np.max(intensity1) - np.min(intensity1)) * \
+                 255.0 + 1.0
+
+    img_msrcp = np.zeros_like(img)
+    
+    for y in range(img_msrcp.shape[0]):
+        for x in range(img_msrcp.shape[1]):
+            B = np.max(img[y, x])
+            A = np.minimum(256.0 / B, intensity1[y, x, 0] / intensity[y, x, 0])
+            img_msrcp[y, x, 0] = A * img[y, x, 0]
+            img_msrcp[y, x, 1] = A * img[y, x, 1]
+            img_msrcp[y, x, 2] = A * img[y, x, 2]
+
+    img_msrcp = np.uint8(img_msrcp - 1.0)
+
+    return img_msrcp

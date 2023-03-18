@@ -30,9 +30,9 @@ def api_ping():
 @app.route('/api/upload', methods=['POST'])
 def api_upload():
     imgid = request.values["id"]
-    print(imgid)
+    print("Upload image id: {}".format(imgid))
     img = request.files.get('file')
-    path = '/data/' + img.filename
+    path = '.\\data\\' + img.filename
     img.save(path)
     return jsonify(id=imgid)
 
@@ -43,14 +43,14 @@ def api_upload():
 #   method: process method: retinex / darkbasc
 #   algorithm param: xxx
 #   return code:
-#    404 if not found. 200 ok
+#    404 if not found. 200 OK
 @app.route('/api/process', methods=['GET'])
 def api_process():
     method = request.values["method"]
     if method != None: # test on getting requests
         return jsonify('{} not implemented!'.format(method))
     return jsonify('Not implemented!');
-    pass
+    
 
 
 
