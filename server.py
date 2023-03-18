@@ -3,7 +3,7 @@ from flask import *
 
 app = Flask(__name__, static_folder = './', static_url_path = '/')
 app.config["JSON_AS_ASCII"] = False
-mainpage_path = "index.html"
+mainpage_path = "webui/index.html"
 is_debug = True
 
 # Mainpage
@@ -22,7 +22,7 @@ def fallback(fallback):
 # Test method
 @app.route('/api/ping', methods=['GET'])
 def api_ping():
-    return jsonify('测试');
+    return 'pong';
 
 # Process Image
 @app.route('/api/upload', methods=['POST'])
@@ -35,4 +35,4 @@ def api_upload():
 
 # Startup
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80, debug=is_debug)
+    app.run(host='0.0.0.0', port=27015, debug=is_debug)

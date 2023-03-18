@@ -1,7 +1,10 @@
-[gd_scene format=3 uid="uid://bik4dqpvfwa6p"]
+[gd_scene load_steps=2 format=3 uid="uid://bik4dqpvfwa6p"]
+
+[ext_resource type="Script" path="res://image.gd" id="1_tiqkx"]
 
 [node name="Image" type="Panel"]
 custom_minimum_size = Vector2(400, 2.08165e-12)
+script = ExtResource("1_tiqkx")
 
 [node name="VboxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -14,21 +17,42 @@ alignment = 1
 
 [node name="Header" type="HBoxContainer" parent="VboxContainer"]
 layout_mode = 2
+size_flags_vertical = 0
 
 [node name="FileName" type="Label" parent="VboxContainer/Header"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "[FileName]"
 vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 1
+
+[node name="ProcessButton" type="Button" parent="VboxContainer/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+text = "处理"
 
 [node name="SaveButton" type="Button" parent="VboxContainer/Header"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 10
-text = "保存图片"
+size_flags_horizontal = 8
+text = "保存"
+
+[node name="DeleteButton" type="Button" parent="VboxContainer/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+text = "删除"
 
 [node name="TextureRect" type="TextureRect" parent="VboxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(400, 400)
+custom_minimum_size = Vector2(400, 600)
 layout_mode = 2
-expand_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[connection signal="pressed" from="VboxContainer/Header/ProcessButton" to="." method="_on_process_button_pressed"]
+[connection signal="pressed" from="VboxContainer/Header/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="VboxContainer/Header/DeleteButton" to="." method="_on_delete_button_pressed"]
