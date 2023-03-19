@@ -1,9 +1,12 @@
 extends Node
 
-var w0 : float = 0.0
-var t0 : float = 0.0
-var a0 : float = 0.0
-var b0 : float = 0.0
+# Darkbasc
+var w : float = 0.0
+var t : float = 0.0
+var r : float = 0.0
+
+# Retinex
+var sigma = []
 
 var imagelist : Node = null
 @onready var image_scene = preload("res://image.tscn")
@@ -17,9 +20,26 @@ func add_image(path) -> void:
 	var node = image_scene.instantiate()
 	node.image_path = path
 	node.image_id = id
+	# Display Image
+	node.img = Image.load_from_file(path)
+	var texture = ImageTexture.create_from_image(node.img)
+	node.get_node("%FileID").text = node.image_id
+	node.get_node("%TextureRect").texture = texture
 	if imagelist != null:
 		imagelist.add_child(node)
-		upload_image(id, path)
+		Global.upload_image(id, path)
+
+
+func add_image_from_img(id, img) -> void:
+	var node = image_scene.instantiate()
+	node.image_id = id
+	# Display Image
+	node.img = img
+	var texture = ImageTexture.create_from_image(img)
+	node.get_node("%FileID").text = node.image_id
+	node.get_node("%TextureRect").texture = texture
+	if imagelist != null:
+		imagelist.add_child(node)
 
 
 func upload_image(id: String, path: String) -> void:
@@ -47,8 +67,41 @@ func upload_image(id: String, path: String) -> void:
 	pass
 
 func process_image(id, method) -> void:
-	pass
+	var process_request = HTTPRequest.new()
+	add_child(process_request)
+	process_request.request_completed.connect(func(result, response_code, headers, body):
+		var response = JSON.parse_string(body.get_string_from_utf8())
+		print(response)
+		download_image(response["id"])
+		)
+	var url = Global.api + ("/api/process?id=%s&method=%s" % [id, method])
+	# Pass params in body
+	var body = ""
+	if method == "darkbasc":
+		# TODO:
+		body = ""
+	elif method == "retinex":
+		var dict = {"sigma_list": sigma}
+		body = JSON.stringify(dict)
+	var error = process_request.request(url, PackedStringArray(), HTTPClient.METHOD_GET, body)
+	if error != OK:
+		push_error(error)
+
 
 func download_image(id) -> void:
-	
-	pass
+	var img_request = HTTPRequest.new()
+	add_child(img_request)
+	img_request.request_completed.connect(func(result, response_code, headers, body):
+		var image = Image.new()
+		if response_code == HTTPClient.RESPONSE_NOT_FOUND:
+			print("Image not found on server!")
+			return
+		var error = image.load_png_from_buffer(body)
+		if error != OK:
+			push_error("Cannot load image.")
+		add_image_from_img(id, image)
+		)
+	var url = Global.api + ("/api/image?id=%s" % id)
+	var error = img_request.request(url)
+	if error != OK:
+		push_error(error)

@@ -5,20 +5,6 @@ extends Panel
 
 var img : Image = null
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	if image_path != "":
-		# Display Image
-		img = Image.load_from_file(image_path)
-		var texture = ImageTexture.create_from_image(img)
-		%FileID.text = image_id
-		%TextureRect.texture = texture
-
-
-func _on_process_button_pressed() -> void:
-	# Global class
-	pass # Replace with function body.
-
 
 func _on_save_button_pressed() -> void:
 	var file_dialog = FileDialog.new()
@@ -31,9 +17,18 @@ func _on_save_button_pressed() -> void:
 	file_dialog.popup_centered()
 	file_dialog.file_selected.connect(_on_image_saved)
 
+
 func _on_image_saved(path):
 	img.save_png(path)
 
 
 func _on_delete_button_pressed() -> void:
 	queue_free()
+
+
+func _on_process_dark_basc_button_pressed() -> void:
+	Global.process_image(image_id, "darkbasc")
+
+
+func _on_process_retinex_button_pressed() -> void:
+	Global.process_image(image_id, "retinex")

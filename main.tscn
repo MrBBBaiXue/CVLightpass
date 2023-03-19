@@ -56,10 +56,10 @@ custom_minimum_size = Vector2(40, 30)
 layout_mode = 2
 
 [node name="ImportButton" type="Button" parent="MainContainer/BodyContainer/PanelContainer/ButtonContainer"]
-custom_minimum_size = Vector2(100, 2.08165e-12)
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-text = "导入"
+text = "导入图片"
 
 [node name="MethodDarkContainer" type="VBoxContainer" parent="MainContainer/BodyContainer/PanelContainer"]
 unique_name_in_owner = true
@@ -97,8 +97,8 @@ vertical_alignment = 1
 layout_mode = 2
 min_value = 0.1
 max_value = 1.0
-step = 0.1
-value = 0.6
+step = 0.01
+value = 0.98
 
 [node name="ParamContainer2" type="VBoxContainer" parent="MainContainer/BodyContainer/PanelContainer/MethodDarkContainer"]
 layout_mode = 2
@@ -148,7 +148,7 @@ layout_mode = 2
 [node name="TitleParam" type="Label" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer1/LabelContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
-text = "a0"
+text = "sigma[0]"
 label_settings = SubResource("LabelSettings_alfy0")
 vertical_alignment = 1
 
@@ -161,10 +161,9 @@ vertical_alignment = 1
 
 [node name="SliderParam" type="HSlider" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer1"]
 layout_mode = 2
-min_value = 0.1
-max_value = 1.0
-step = 0.1
-value = 0.6
+min_value = 1.0
+max_value = 255.0
+value = 15.0
 
 [node name="ParamContainer2" type="VBoxContainer" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer"]
 layout_mode = 2
@@ -175,7 +174,7 @@ layout_mode = 2
 [node name="TitleParam" type="Label" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer2/LabelContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
-text = "b0"
+text = "sigma[1]"
 label_settings = SubResource("LabelSettings_alfy0")
 vertical_alignment = 1
 
@@ -188,13 +187,35 @@ vertical_alignment = 1
 
 [node name="SliderParam" type="HSlider" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer2"]
 layout_mode = 2
-min_value = 0.1
-max_value = 1.0
-step = 0.1
-value = 0.1
+min_value = 1.0
+max_value = 255.0
+value = 80.0
 
-[node name="VSeparator" type="VSeparator" parent="MainContainer/BodyContainer"]
+[node name="ParamContainer3" type="VBoxContainer" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer"]
 layout_mode = 2
+
+[node name="LabelContainer" type="HBoxContainer" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer3"]
+layout_mode = 2
+
+[node name="TitleParam" type="Label" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer3/LabelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "sigma[2]"
+label_settings = SubResource("LabelSettings_alfy0")
+vertical_alignment = 1
+
+[node name="ValueParam" type="Label" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer3/LabelContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "[Value]"
+label_settings = SubResource("LabelSettings_alfy0")
+vertical_alignment = 1
+
+[node name="SliderParam" type="HSlider" parent="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer3"]
+layout_mode = 2
+min_value = 1.0
+max_value = 255.0
+value = 200.0
 
 [node name="ImageContainer" type="ScrollContainer" parent="MainContainer/BodyContainer"]
 layout_mode = 2
@@ -207,7 +228,8 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [connection signal="pressed" from="MainContainer/BodyContainer/PanelContainer/ButtonContainer/ImportButton" to="." method="_on_import_button_pressed"]
-[connection signal="value_changed" from="MainContainer/BodyContainer/PanelContainer/MethodDarkContainer/ParamContainer1/SliderParam" to="." method="_on_param1_value_changed"]
-[connection signal="value_changed" from="MainContainer/BodyContainer/PanelContainer/MethodDarkContainer/ParamContainer2/SliderParam" to="." method="_on_param2_value_changed"]
-[connection signal="value_changed" from="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer1/SliderParam" to="." method="_on_param3_value_changed"]
-[connection signal="value_changed" from="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer2/SliderParam" to="." method="_on_param4_value_changed"]
+[connection signal="value_changed" from="MainContainer/BodyContainer/PanelContainer/MethodDarkContainer/ParamContainer1/SliderParam" to="." method="_on_param_value_changed"]
+[connection signal="value_changed" from="MainContainer/BodyContainer/PanelContainer/MethodDarkContainer/ParamContainer2/SliderParam" to="." method="_on_param_value_changed"]
+[connection signal="value_changed" from="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer1/SliderParam" to="." method="_on_param_value_changed"]
+[connection signal="value_changed" from="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer2/SliderParam" to="." method="_on_param_value_changed"]
+[connection signal="value_changed" from="MainContainer/BodyContainer/PanelContainer/MethodRetinexContainer/ParamContainer3/SliderParam" to="." method="_on_param_value_changed"]
