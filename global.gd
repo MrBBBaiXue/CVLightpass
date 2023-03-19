@@ -2,8 +2,8 @@ extends Node
 
 # Darkbasc
 var w : float = 0.0
-var t : float = 0.0
 var r : float = 0.0
+var maxV1 : float = 0.0
 
 # Retinex
 var sigma = []
@@ -78,8 +78,8 @@ func process_image(id, method) -> void:
 	# Pass params in body
 	var body = ""
 	if method == "darkbasc":
-		# TODO:
-		body = ""
+		var dict = { "r":r, "eps":0.001, "w": w, "maxV1":maxV1 }
+		body = JSON.stringify(dict)
 	elif method == "retinex":
 		var dict = {"sigma_list": sigma}
 		body = JSON.stringify(dict)

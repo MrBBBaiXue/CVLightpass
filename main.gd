@@ -2,17 +2,21 @@ extends Control
 
 # Parameter Container.
 # Would be easier if changed to child scene.
-@onready var param1_value = %MethodDarkContainer/ParamContainer1/LabelContainer/ValueParam
-@onready var param2_value = %MethodDarkContainer/ParamContainer2/LabelContainer/ValueParam
-@onready var param3_value = %MethodRetinexContainer/ParamContainer1/LabelContainer/ValueParam
-@onready var param4_value = %MethodRetinexContainer/ParamContainer2/LabelContainer/ValueParam
-@onready var param5_value = %MethodRetinexContainer/ParamContainer3/LabelContainer/ValueParam
+@onready var p1value = %MethodDarkContainer/ParamContainer1/LabelContainer/ValueParam
+@onready var p2value = %MethodDarkContainer/ParamContainer2/LabelContainer/ValueParam
+@onready var p3value = %MethodDarkContainer/ParamContainer3/LabelContainer/ValueParam
+
+@onready var p4value = %MethodRetinexContainer/ParamContainer1/LabelContainer/ValueParam
+@onready var p5value = %MethodRetinexContainer/ParamContainer2/LabelContainer/ValueParam
+@onready var p6value = %MethodRetinexContainer/ParamContainer3/LabelContainer/ValueParam
 # Slider nodes
-@onready var param1_slider = %MethodDarkContainer/ParamContainer1/SliderParam
-@onready var param2_slider = %MethodDarkContainer/ParamContainer2/SliderParam
-@onready var param3_slider = %MethodRetinexContainer/ParamContainer1/SliderParam
-@onready var param4_slider = %MethodRetinexContainer/ParamContainer2/SliderParam
-@onready var param5_slider = %MethodRetinexContainer/ParamContainer3/SliderParam
+@onready var p1slider = %MethodDarkContainer/ParamContainer1/SliderParam
+@onready var p2slider = %MethodDarkContainer/ParamContainer2/SliderParam
+@onready var p3slider = %MethodDarkContainer/ParamContainer3/SliderParam
+
+@onready var p4slider = %MethodRetinexContainer/ParamContainer1/SliderParam
+@onready var p5slider = %MethodRetinexContainer/ParamContainer2/SliderParam
+@onready var p6slider = %MethodRetinexContainer/ParamContainer3/SliderParam
 
 
 # Called when the node enters the scene tree for the first time.
@@ -65,11 +69,13 @@ func _on_param_value_changed(value):
 
 
 func _update_params():
-	param1_value.text = str(param1_slider.value)
-	param2_value.text = str(param2_slider.value)
-	param3_value.text = str(param3_slider.value)
-	param4_value.text = str(param4_slider.value)
-	param5_value.text = str(param5_slider.value)
-	Global.w = float(param1_value.text)
-	Global.t = float(param2_value.text)
-	Global.sigma = [int(param3_value.text), int(param4_value.text), int(param5_value.text)]
+	p1value.text = str(p1slider.value)
+	p2value.text = str(p2slider.value)
+	p3value.text = str(p3slider.value)
+	p4value.text = str(p4slider.value)
+	p5value.text = str(p5slider.value)
+	p6value.text = str(p6slider.value)
+	Global.w = float(p1value.text)
+	Global.r = float(p2value.text)
+	Global.maxV1 = float(p3value.text)
+	Global.sigma = [int(p4value.text), int(p5value.text), int(p6value.text)]

@@ -4,7 +4,7 @@ import json
 import cv2
 from datetime import datetime
 from algorithms.retinex import *
-
+from algorithms.darkbasc import *
 
 app = Flask(__name__, static_folder = './', static_url_path = '/')
 app.config["JSON_AS_ASCII"] = False
@@ -57,15 +57,22 @@ def api_upload():
 def api_process():
     imgid = request.values["id"]
     method = request.values["method"]
+    path = '.\\data\\' + imgid + '.png'
+    img = cv2.imread(path)
     if method != None:
         if method == "darkbasc":
             # Get image id from param in url,
             # get algorithm params in request body
-            pass
+            config = json.loads(request.get_data(as_text=True))
+            img_darkbasc = deHaze(img / 255.0,
+                                   r=int(config['r']), eps=float(config['eps']), w=float(config['w']), maxV1=float(config['maxV1'])
+                                   ) * 255
+            savid = str(int(datetime.timestamp(datetime.now())))
+            savpath = '.\\data\\' + savid + '.png'
+            cv2.imwrite(savpath, img_darkbasc)
+            return jsonify(id=savid)
         if method == "retinex":
             config = json.loads(request.get_data(as_text=True))
-            path = '.\\data\\' + imgid + '.png'
-            img = cv2.imread(path)
             print('Retinex autoMSRCR processing......')
             img_amsrcr = automatedMSRCR(img, config['sigma_list'])
             savid = str(int(datetime.timestamp(datetime.now())))
