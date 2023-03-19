@@ -61,6 +61,12 @@ layout_mode = 2
 size_flags_horizontal = 0
 text = "导入图片"
 
+[node name="ServerAddress" type="TextEdit" parent="MainContainer/BodyContainer/PanelContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+text = "http://127.0.0.1:27015"
+
 [node name="MethodDarkContainer" type="VBoxContainer" parent="MainContainer/BodyContainer/PanelContainer"]
 unique_name_in_owner = true
 layout_mode = 2

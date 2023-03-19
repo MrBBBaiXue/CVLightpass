@@ -9,9 +9,9 @@ var maxV1 : float = 0.0
 var sigma = []
 
 var imagelist : Node = null
+var serverAddress : Node = null
 @onready var image_scene = preload("res://image.tscn")
 
-const api = "http://127.0.0.1:27015"
 
 func add_image(path) -> void:
 	# Init image node.
@@ -61,7 +61,7 @@ func upload_image(id: String, path: String) -> void:
 			var response = body.get_string_from_utf8()
 			print(response)
 		)
-	var error = request.request_raw(api + ('/api/upload?id=%s' % id), headers, HTTPClient.METHOD_POST, body)
+	var error = request.request_raw(serverAddress.text + ('/api/upload?id=%s' % id), headers, HTTPClient.METHOD_POST, body)
 	if error != OK:
 		push_error(error)
 	pass
@@ -74,7 +74,7 @@ func process_image(id, method) -> void:
 		print(response)
 		download_image(response["id"])
 		)
-	var url = Global.api + ("/api/process?id=%s&method=%s" % [id, method])
+	var url = serverAddress.text + ("/api/process?id=%s&method=%s" % [id, method])
 	# Pass params in body
 	var body = ""
 	if method == "darkbasc":
@@ -101,7 +101,7 @@ func download_image(id) -> void:
 			push_error("Cannot load image.")
 		add_image_from_img(id, image)
 		)
-	var url = Global.api + ("/api/image?id=%s" % id)
+	var url = serverAddress.text + ("/api/image?id=%s" % id)
 	var error = img_request.request(url)
 	if error != OK:
 		push_error(error)

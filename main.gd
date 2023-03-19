@@ -24,6 +24,7 @@ func _ready():
 	_update_params()
 	# Register Image list node
 	Global.imagelist = %ImageList
+	Global.serverAddress = %ServerAddress
 	# Check backend status
 	var test_request = HTTPRequest.new()
 	add_child(test_request)
@@ -36,7 +37,7 @@ func _ready():
 			%ServerStatus.text = "连接失败"
 		test_request.queue_free()
 		)
-	var error = test_request.request(Global.api + "/api/ping")
+	var error = test_request.request(Global.serverAddress.text + "/api/ping")
 	print(error)
 	if error != OK:
 		push_error(error)
