@@ -65,8 +65,11 @@ def api_process():
             # get algorithm params in request body
             config = json.loads(request.get_data(as_text=True))
             img_darkbasc = deHaze(img / 255.0,
-                                   r=int(config['r']), eps=float(config['eps']), w=float(config['w']), maxV1=float(config['maxV1'])
-                                   ) * 255
+                                r=int(config['r']),
+                                eps=float(config['eps']),
+                                w=float(config['w']),
+                                maxV1=float(config['maxV1'])
+                                ) * 255
             savid = str(int(datetime.timestamp(datetime.now())))
             savpath = '.\\data\\' + savid + '.png'
             cv2.imwrite(savpath, img_darkbasc)
