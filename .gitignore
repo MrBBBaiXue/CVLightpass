@@ -2,6 +2,8 @@
 !data/.gdignore
 data/*.jpg
 data/*.png
+!samples/.gdignore
+samples/*.png
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
